@@ -6,9 +6,9 @@ import requests
 
 
 def delete_db(): #this will delete all database entries
-   cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
-   db = cluster["all_movies"]
-   db["movies"].delete_many({})
+   cluster = MongoClient("mongodb+srv://NguyenJimmy:AIr4QUj1LUWmPxs8@filmfinder.ecxy83f.mongodb.net/")
+   db = cluster["Movies"]
+   db["Popular"].delete_many({})
 
 
 def update_db():
@@ -16,11 +16,11 @@ def update_db():
    movieList = [] #holds the list of the movie objects
    id_set = set() #this set holds duplicate ids
 
-   cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
+   cluster = MongoClient("mongodb+srv://NguyenJimmy:AIr4QUj1LUWmPxs8@filmfinder.ecxy83f.mongodb.net/")
    
-   db = cluster["all_movies"]
+   db = cluster["Movies"]
 
-   collection = db["movies"]
+   collection = db["popular"]
 
    for i in range(1,31): #change range here to add more pages of the popular movies to the database
       url = f"https://api.themoviedb.org/3/movie/popular?language=en-US&page={i}" #popular page 
@@ -62,9 +62,9 @@ def update_db():
 def search_movie_title(movie):
    cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
    
-   db = cluster["all_movies"]
+   db = cluster["Movies"]
 
-   collection = db["movies"] 
+   collection = db["Popular"] 
 
    match = collection.find({"title": movie})
 

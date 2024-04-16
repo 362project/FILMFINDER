@@ -2,7 +2,14 @@ from flask import Flask, request, redirect, url_for, render_template
 import requests
 from mongodb import update_db, delete_db, search_movie_title
 import json
+from pymongo import MongoClient
 app = Flask(__name__)
+
+#database
+cluster = MongoClient("mongodb+srv://NguyenJimmy:AIr4QUj1LUWmPxs8@filmfinder.ecxy83f.mongodb.net/")
+database = cluster["Movies"] 
+collection = database["popular"] 
+
 
 @app.route("/")
 def route():
@@ -37,9 +44,13 @@ def searchTitle():
     matches = search_movie_title(movie_title)
     return f"Movie Title: {movie_title} Results: {matches}"
     
-
-
-
+@app.route("/popular") #displays popular movies
+def popular():
+    movielist = [];
+    for doc in collection.find():
+        movielist.append(doc)
+    
+    return {"list": movielist}, 202
 
 
 
@@ -49,7 +60,7 @@ def test():
     id_set = set()  # Set to keep track of movie IDs
     finalList =[]
 
-    for i in range(1,31): #change range here to add more pages of the popular movies to the database
+    for i in range(1,1): #change range here to add more pages of the popular movies to the database
         url = f"https://api.themoviedb.org/3/movie/popular?language=en-US&page={i}" #popular page 
 
         headers = {

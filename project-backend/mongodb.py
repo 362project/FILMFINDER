@@ -62,16 +62,21 @@ def update_db():
 def search_movie_title(movie):
    cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
    
-   db = cluster["Movies"]
+   db = cluster["all_movies"]
 
-   collection = db["Popular"] 
+   collection = db["movies"] 
 
-   match = collection.find({"title": movie})
-
-   matches =[] #list of matches found from searching database
-
-   for i in match:
-      matches.append(i) #appending all matches to list
-
+   matches = [];
+   matches.append(
+       {
+           "$match": {
+               "title": {
+                   "$regex": movie,
+                   "$options": "i",
+               }
+           }
+       }
+   )
+   
    return matches
    

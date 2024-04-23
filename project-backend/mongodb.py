@@ -61,13 +61,13 @@ def update_db():
 
 def search_movie_title(movie):
    cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
-   
+
    db = cluster["all_movies"]
 
    collection = db["movies"] 
 
-   matches = [];
-   matches.append(
+   matches = []
+   pipeline=(
        {
            "$match": {
                "title": {
@@ -77,6 +77,9 @@ def search_movie_title(movie):
            }
        }
    )
-   
+   query = collection.find(pipeline=pipeline)
+   for list in query:
+       matches.append(list)
+
    return matches
    

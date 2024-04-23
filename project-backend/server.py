@@ -96,3 +96,13 @@ def test():
         finalList.append(post)
 
     return finalList
+
+@app.route("/recommendation", methods = ["POST"])
+def recommendation():
+    if request.method == "POST":
+        uploaded_json = dict(request.json)
+
+        movielist = []
+        
+    
+    return

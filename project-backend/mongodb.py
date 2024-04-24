@@ -6,7 +6,7 @@ import requests
 
 
 def delete_db(): #this will delete all database entries
-   cluster = MongoClient("mongodb+srv://NguyenJimmy:AIr4QUj1LUWmPxs8@filmfinder.ecxy83f.mongodb.net/")
+   cluster = MongoClient("mongodb+srv://shadow125ninja:testing123@filmfinder.yznbxyz.mongodb.net/")
    db = cluster["Movies"]
    db["Popular"].delete_many({})
 
@@ -16,18 +16,18 @@ def update_db():
    movieList = [] #holds the list of the movie objects
    id_set = set() #this set holds duplicate ids
 
-   cluster = MongoClient("mongodb+srv://NguyenJimmy:AIr4QUj1LUWmPxs8@filmfinder.ecxy83f.mongodb.net/")
+   cluster = MongoClient("mongodb+srv://shadow125ninja:testing123@filmfinder.yznbxyz.mongodb.net/")
    
    db = cluster["Movies"]
 
-   collection = db["popular"]
+   collection = db["Popular"]
 
    for i in range(1,31): #change range here to add more pages of the popular movies to the database
       url = f"https://api.themoviedb.org/3/movie/popular?language=en-US&page={i}" #popular page 
 
       headers = {
          "accept": "application/json", #put your token after Bearer
-         "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MWYyYmQxZTgwNTMzNTdlN2ZiN2NlZWI0YTIzN2IxYyIsInN1YiI6IjY1YzE4ZmQ5YTA2NjQ1MDE2MTVkODM0YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MylPZUvgDbWY9wheuA6PfkzGWovHcS4LaZs-q8Gju-E" 
+         "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDZlNjUzZDdlN2M1NzE5MzU0YjcyYTY3NmZiNDY3NSIsInN1YiI6IjY1YzE4YzMxOTY1M2Y2MDE2MmVjNGMwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.bXMIhE7bp_5OtiTpG_cfIJa6HSguuFpCuyS8oBq33qM" 
       }                        
       
       response = requests.get(url, headers=headers)   
@@ -56,30 +56,26 @@ def update_db():
          "rating": entries["vote_average"]
       } 
       collection.insert_one(post)
-      print(f"Added {post["title"]}")
+      print(f"Added {post['title']}")
    print("---ALL MOVIES UPDATED IN DATABASE---")
 
 def search_movie_title(movie):
-   cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
+   cluster = MongoClient("mongodb+srv://shadow125ninja:testing123@filmfinder.yznbxyz.mongodb.net/")
 
-   db = cluster["all_movies"]
+   db = cluster["Movies"]
 
-   collection = db["movies"] 
+   collection = db["Popular"] 
 
-   matches = []
-   pipeline=(
+   match = collection.find(
        {
-           "$match": {
-               "title": {
-                   "$regex": movie,
-                   "$options": "i",
-               }
-           }
+         "title": {
+               "$regex": movie,
+               "$options": "i"
+         }
        }
    )
-   query = collection.find(pipeline=pipeline)
-   for list in query:
-       matches.append(list)
+
+   matches = list(match)
 
    return matches
    

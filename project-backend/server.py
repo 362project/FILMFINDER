@@ -6,9 +6,9 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 #database
-cluster = MongoClient("mongodb+srv://NguyenJimmy:AIr4QUj1LUWmPxs8@filmfinder.ecxy83f.mongodb.net/")
+cluster = MongoClient("mongodb+srv://shadow125ninja:testing123@filmfinder.yznbxyz.mongodb.net/")
 database = cluster["Movies"] 
-collection = database["popular"] 
+collection = database["Popular"] 
 
 
 @app.route("/")

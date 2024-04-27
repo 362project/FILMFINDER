@@ -27,7 +27,7 @@ def update_db():
 
       headers = {
          "accept": "application/json", #put your token after Bearer
-         "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDZlNjUzZDdlN2M1NzE5MzU0YjcyYTY3NmZiNDY3NSIsInN1YiI6IjY1YzE4YzMxOTY1M2Y2MDE2MmVjNGMwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.bXMIhE7bp_5OtiTpG_cfIJa6HSguuFpCuyS8oBq33qM" 
+         "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MWYyYmQxZTgwNTMzNTdlN2ZiN2NlZWI0YTIzN2IxYyIsInN1YiI6IjY1YzE4ZmQ5YTA2NjQ1MDE2MTVkODM0YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MylPZUvgDbWY9wheuA6PfkzGWovHcS4LaZs-q8Gju-E" 
       }                        
       
       response = requests.get(url, headers=headers)   

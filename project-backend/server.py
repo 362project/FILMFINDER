@@ -102,7 +102,52 @@ def recommendation():
     if request.method == "POST":
         uploaded_json = dict(request.json)
 
-        movielist = []
+        genre = uploaded_json.get("genre").split()
+        date = uploaded_json.get("release_year")
+        rating = uploaded_json.get("rating")
+
+        pipeline = []
+        convertGenre = {"Action": 28, "Adventure": 12, "Animation": 16, "Comedy": 35, "Crime": 80, "Documentary": 99, 
+                        "Drama": 18, "Family": 10751, "Fantasy": 14, "History": 36, "Horror": 27, "Music": 10402,
+                        "Mystery": 9648, "Romance": 10749, "Science Fiction": 878, "TV Movie": 10770, "Thriller": 53,
+                        "War": 10752, "Western": 37}
         
-    
-    return
+        if not genre:   #if genre is not empty
+            searchGenre = [];
+            for i in genre:
+                searchGenre.append(convertGenre[i]) #convert the list of genres into ids to search
+            
+            for key in searchGenre: #adds search query into pipeline
+                pipeline.append(
+                    {
+                        "$match":{
+                            "genre": key 
+                        }
+                    }
+                )
+
+        if date != "":
+            pipeline.append({
+                "$match":{
+                    "release_date": date
+                }
+            })
+
+        if rating != "":
+            pipeline.append({
+                "$project": {
+                    "diff": {"$abs": {"$subtract": [rating, "$rating"]}},
+                    "doc": "$$ROOT"
+                }
+            })
+
+            pipeline.append({
+                "$sort": {"diff": 1}
+            })
+
+        query = collection.aggregate(pipeline=pipeline);
+        results = [];
+        for elem in query:
+            results.append(elem)
+
+    return {results}

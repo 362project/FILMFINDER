@@ -5,7 +5,7 @@ main {
     align-items: center;
     margin: auto;
     width: 100%;
-    padding: 0px 100px;
+    padding: 100px;
     background-color: #2a2a2a;
 }
 
@@ -44,7 +44,6 @@ main p {
     width: 350px;
     transition: all 0.5s;
     cursor: pointer;
-    margin-top: -25%;
 }
 
 .button span {
@@ -52,6 +51,7 @@ main p {
     display: inline-block;
     position: relative;
     transition: 0.5s;
+    line-height: 50px;
 }
 
 .button span:after {

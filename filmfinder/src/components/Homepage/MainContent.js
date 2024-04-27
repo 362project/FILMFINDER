@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './main.css';
 import Logo from '../../logo-no-background.png';
 
@@ -16,9 +17,9 @@ function MainContent() {
             </form>
 
             <div className="button-container">
-                <button className="button"><span>Get Recommended a Movie</span></button>
-                <button className="button"><span>Find a Random Movie</span></button>
-                <button className="button"><span>Most Popular Movies</span></button>
+                <Link to="/form" className="button"><span>Get Recommended a Movie</span></Link>
+                <Link to="/" className="button"><span>Find a Random Movie</span></Link>
+                <Link to="/" className="button"><span>Most Popular Movies</span></Link>
             </div>
             
         </main>

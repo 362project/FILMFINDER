@@ -6,9 +6,7 @@ import Footer from '../Footer/Footer.js';
 function Formpage() {
     return (
       <div>
-        <Header />
         <MainContent />
-        <Footer />
       </div>
     );
   }

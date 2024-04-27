@@ -5,25 +5,24 @@ import './navbar.css';
 function Header() {
     return (
         <header>
-            <div class = "topnav" id="myTopnav">
-            <Link to="/" className="active">Home</Link>
+            <div className="topnav" id="myTopnav">
+                <Link to="/" className="active">Home</Link>
 
-            <div class="dropdown">
-            <a href="javascript:void(0)" class="dropbtn">Movies</a>
-                <div class="dropdown-content">
-                    <a href="#">Recommended</a>
-                    <a href="#">Random</a>
-                    <a href="#">Most Popular</a>
+                <div className="dropdown">
+                    <Link to="#" className="dropbtn">Movies</Link>
+                    <div className="dropdown-content">
+                        <Link to="/form">Recommended</Link>
+                        <Link to="/">Random</Link>
+                        <Link to="/">Most Popular</Link>
+                    </div>
                 </div>
+
+                <Link to="/about">About</Link>
+
+                <a href="javascript:void(0);" className="icon">
+                    <i className="fa fa-bars"></i>
+                </a>
             </div>
-
-            <Link to="/about">About</Link>
-
-            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-                <i class="fa fa-bars"></i>
-            </a>
-
-                </div>
         </header>
     );
 }

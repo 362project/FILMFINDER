@@ -6,9 +6,7 @@ import Footer from '../Footer/Footer.js';
 function Homepage() {
     return (
       <div>
-        <Header />
         <MainContent />
-        <Footer />
       </div>
     );
   }

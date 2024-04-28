@@ -91,7 +91,7 @@ function MainContent() {
 
             <p className='subtitle'>Select a User Rating</p>
 
-            <div className="user-rating">
+            <div className="user-rating-container">
                 <label className="user-rating">
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>

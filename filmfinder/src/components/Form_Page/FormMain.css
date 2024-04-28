@@ -2,7 +2,6 @@
 main {
     overflow: auto;
     display: grid;
-    align-items: center;
     margin: auto;
     width: 100%;
     padding: 0px 100px;
@@ -113,7 +112,16 @@ main {
     }
 /*/////////////////////////////////////////////User Rating Selector////////////////////////////////////////////*/
 
+  .user-rating-container{
+    display: grid;
+    padding-left: 25%;
+    width: 60%;
+    justify-self: center;
+  }
+
   .user-rating {
+    height: auto;
+    width: 40%;
     display: block;
     position: relative;
     padding-left: 35px;

@@ -2,7 +2,15 @@ from flask import Flask, request, redirect, url_for, render_template
 import requests
 from mongodb import update_db, delete_db, search_movie_title
 import json
+import pymongo 
+from pymongo import MongoClient
 app = Flask(__name__)
+
+cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
+
+db = cluster["all_movies"]
+
+collection = db["movies"]
 
 @app.route("/")
 def route():
@@ -37,12 +45,6 @@ def searchTitle():
     matches = search_movie_title(movie_title)
     return f"Movie Title: {movie_title} Results: {matches}"
     
-
-
-
-
-
-
 @app.route("/apiTEST") # TESTING API RETURN
 def test():
     testList = []
@@ -85,3 +87,99 @@ def test():
         finalList.append(post)
 
     return finalList
+
+@app.route("/recommendation", methods = ["POST"])
+def recommendation():
+    if request.method == "POST":
+        uploaded_json = dict(request.json)
+
+        genre = uploaded_json.get("genre").split()
+        date = uploaded_json.get("year")
+        rating = uploaded_json.get("rating")
+
+        pipeline = []
+        convertGenre = {"Action": 28, "Adventure": 12, "Animation": 16, "Comedy": 35, "Crime": 80, "Documentary": 99, 
+                        "Drama": 18, "Family": 10751, "Fantasy": 14, "History": 36, "Horror": 27, "Music": 10402,
+                        "Mystery": 9648, "Romance": 10749, "Science Fiction": 878, "TV Movie": 10770, "Thriller": 53,
+                        "War": 10752, "Western": 37}
+        
+        if genre != "":   #if genre is not empty
+            searchGenre = []
+            for i in genre:
+                searchGenre.append(convertGenre[i]) #convert the list of genres into ids to search
+            
+            for key in searchGenre: #adds search query into pipeline
+                pipeline.append(
+                    {
+                        "$match":{
+                            "genre_ids": {
+                                "$in": [key]
+                            }
+                        }
+                    }
+                )
+
+        if date != "":
+            pipeline.append({
+                "$match":{
+                    "year": date
+                }
+            })
+
+        if rating != "":
+            pipeline.append({
+                "$match": {
+                    "rating": rating
+                }
+            })
+
+            pipeline.append({
+                "$sort": {"votes": 1}
+            })
+
+        query = collection.aggregate(pipeline=pipeline)
+        results = []
+        for elem in query:
+            results.append(elem)
+
+    return {"results": results}
+
+@app.route("/find", methods = ["POST"])
+def find():
+    if request.method == "POST":
+        uploaded_json = dict(request.json)
+
+        genre = uploaded_json.get("genre")
+
+        # convertGenre = {"Action": 28, "Adventure": 12, "Animation": 16, "Comedy": 35, "Crime": 80, "Documentary": 99, 
+        #         "Drama": 18, "Family": 10751, "Fantasy": 14, "History": 36, "Horror": 27, "Music": 10402,
+        #         "Mystery": 9648, "Romance": 10749, "Science Fiction": 878, "TV Movie": 10770, "Thriller": 53,
+        #         "War": 10752, "Western": 37}
+        
+        # searchGenre = []
+        # for i in genre:
+        #     searchGenre.append(convertGenre[i]) 
+            
+        pipeline = []
+        
+        pipeline.append(
+            {
+                "$match":{
+                    "genre_ids": {
+                    "$in": genre
+                    } 
+                }
+            } 
+        )
+
+        query = collection.aggregate(pipeline=pipeline)
+
+        results = []
+        for elem in query:
+            results.append(elem)
+    
+    return {"results": results}
+        
+
+# @app.route("/random")
+# def random():

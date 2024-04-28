@@ -82,7 +82,9 @@ function MainContent() {
             </div>
 
             <p className='subtitle'>Release Year</p>
-                <input classname="release-year" placeholder='Enter Year'></input>
+            <div className="release-year">
+                <input type="text" placeholder='Enter Year'></input>
+            </div>
 
             {/*Import stars*/}
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>

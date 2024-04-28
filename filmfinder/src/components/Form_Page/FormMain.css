@@ -1,6 +1,6 @@
 /* MainContent.css */
 main {
-    height: 200%;
+    overflow: auto;
     display: grid;
     align-items: center;
     margin: auto;
@@ -92,18 +92,24 @@ main {
   }
 
 /*/////////////////////////////////////////////Year Search Bar////////////////////////////////////////////*/
-  .release-year [type=text] {
+  .release-year{
+    display: grid;
+    padding: 5px;
+    margin: 5px;
+    max-height: 30px;;
+  }
+  .release-year input[type=text] {
       display: grid;
-      padding: 10px;
-      margin: 10%;
-      font-size: 20px;
+      padding: auto;
+      align-content: center;
+      margin: auto;
       border: 1px solid grey;
-      width: auto;
-      max-width: 50px;
+      font-size: 25px;
+      width: 60%;
       background: #f1f1f1;
     }
     * {
-      box-sizing: border-box;
+      box-sizing:  content-box;
     }
 /*/////////////////////////////////////////////User Rating Selector////////////////////////////////////////////*/
 
@@ -178,6 +184,6 @@ main {
   background-color: #a80c0c;
   color: white; /* Add a text color */
   font-size: 20px;
-  padding: 14px 20px; /* Add some padding */
+  padding: 14px 18px; /* Add some padding */
   cursor: pointer; /* Add a pointer cursor on mouse-over */
 }

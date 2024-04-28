@@ -3,8 +3,8 @@ footer {
     background-color: #222222; /* Background color for the footer */
     border-top: 0px solid #ccc; /* Border at the top of the footer */
     padding: 5px; /* Padding for the content inside the footer */
-    position: sticky; /* Fixed position to keep the footer at the bottom of the viewport */
-    width: 100%; /* Full width */
+    position: fixed; 
+    width: 100%; 
 }
 footer p{
     font-size: 12px;

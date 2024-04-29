@@ -18,8 +18,8 @@ function MainContent() {
 
             <div className="button-container">
                 <Link to="/form" className="button"><span>Get Recommended a Movie</span></Link>
-                <Link to="/" className="button"><span>Find a Random Movie</span></Link>
-                <Link to="/" className="button"><span>Most Popular Movies</span></Link>
+                <Link to="/random" className="button"><span>Find a Random Movie</span></Link>
+                <Link to="/popular" className="button"><span>Most Popular Movies</span></Link>
             </div>
             
         </main>

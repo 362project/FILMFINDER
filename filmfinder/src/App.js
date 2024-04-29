@@ -4,8 +4,9 @@ import Header from './components/Header/Header.js';
 import {BrowserRouter, Routes, Route } from 'react-router-dom';
 import Homepage from './components/Homepage/Homepage.js';
 import FormPage from './components/Form_Page/Formpage.js';
-import ResultsPage from './components/Results/Results.js';
+import PopularResultsPage from './components/Popular Results/Results.js';
 import AboutPage from './components/About_Page/About.js';
+import Randompage from './components/Random Movie/Random.js';
 
 function App() {
   return (
@@ -14,8 +15,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/form" element={<FormPage/>} />
-        <Route path="/results" element={<ResultsPage/>} />
+        <Route path="/popular" element={<PopularResultsPage/>} />
         <Route path="/about" element={<AboutPage/>} />
+        <Route path="/random" element={<Randompage/>} />
       </Routes>
     <Footer/>
     </BrowserRouter>

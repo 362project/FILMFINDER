@@ -12,8 +12,8 @@ function Header() {
                     <Link to="#" className="dropbtn">Movies</Link>
                     <div className="dropdown-content">
                         <Link to="/form">Recommended</Link>
-                        <Link to="/">Random</Link>
-                        <Link to="/">Most Popular</Link>
+                        <Link to="/random">Random</Link>
+                        <Link to="/popular">Most Popular</Link>
                     </div>
                 </div>
 

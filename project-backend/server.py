@@ -2,14 +2,15 @@ from flask import Flask, request, redirect, url_for, render_template
 import requests
 from mongodb import update_db, delete_db, search_movie_title
 import json
+import pymongo 
 from pymongo import MongoClient
+import random
 app = Flask(__name__)
 
 #database
-cluster = MongoClient("mongodb+srv://shadow125ninja:testing123@filmfinder.yznbxyz.mongodb.net/")
-database = cluster["Movies"] 
-collection = database["Popular"] 
-
+cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
+db = cluster["all_movies"]
+collection = db["movies"]
 
 @app.route("/")
 def route():
@@ -44,23 +45,13 @@ def searchTitle():
     matches = search_movie_title(movie_title)
     return f"Movie Title: {movie_title} Results: {matches}"
     
-@app.route("/popular") #displays popular movies
-def popular():
-    movielist = [];
-    for doc in collection.find():
-        movielist.append(doc)
-    
-    return {"list": movielist}, 202
-
-
-
 @app.route("/apiTEST") # TESTING API RETURN
 def test():
     testList = []
     id_set = set()  # Set to keep track of movie IDs
     finalList =[]
 
-    for i in range(1,1): #change range here to add more pages of the popular movies to the database
+    for i in range(1,31): #change range here to add more pages of the popular movies to the database
         url = f"https://api.themoviedb.org/3/movie/popular?language=en-US&page={i}" #popular page 
 
         headers = {
@@ -97,13 +88,21 @@ def test():
 
     return finalList
 
+@app.route("/popular") #displays popular movies
+def popular():
+    movielist = [];
+    for doc in collection.aggregate([{"$sort": {"votes": -1}}]):
+        movielist.append(doc)
+    
+    return {"list": movielist}, 202
+
 @app.route("/recommendation", methods = ["POST"])
 def recommendation():
     if request.method == "POST":
         uploaded_json = dict(request.json)
 
         genre = uploaded_json.get("genre").split()
-        date = uploaded_json.get("release_year")
+        date = uploaded_json.get("year")
         rating = uploaded_json.get("rating")
 
         pipeline = []
@@ -112,8 +111,8 @@ def recommendation():
                         "Mystery": 9648, "Romance": 10749, "Science Fiction": 878, "TV Movie": 10770, "Thriller": 53,
                         "War": 10752, "Western": 37}
         
-        if not genre:   #if genre is not empty
-            searchGenre = [];
+        if genre != "":   #if genre is not empty
+            searchGenre = []
             for i in genre:
                 searchGenre.append(convertGenre[i]) #convert the list of genres into ids to search
             
@@ -121,7 +120,9 @@ def recommendation():
                 pipeline.append(
                     {
                         "$match":{
-                            "genre": key 
+                            "genre_ids": {
+                                "$in": [key]
+                            }
                         }
                     }
                 )
@@ -129,25 +130,78 @@ def recommendation():
         if date != "":
             pipeline.append({
                 "$match":{
-                    "release_date": date
+                    "year": date
                 }
             })
 
         if rating != "":
             pipeline.append({
-                "$project": {
-                    "diff": {"$abs": {"$subtract": [rating, "$rating"]}},
-                    "doc": "$$ROOT"
+                "$match": {
+                    "rating": rating
                 }
             })
 
             pipeline.append({
-                "$sort": {"diff": 1}
+                "$sort": {"votes": -1}
             })
 
-        query = collection.aggregate(pipeline=pipeline);
-        results = [];
+        query = collection.aggregate(pipeline=pipeline)
+        results = []
         for elem in query:
             results.append(elem)
 
-    return {results}
+    return {"results": results}
+
+@app.route("/find", methods = ["POST"])
+def find():
+    if request.method == "POST":
+        uploaded_json = dict(request.json)
+
+        genre = uploaded_json.get("genre")
+
+        # convertGenre = {"Action": 28, "Adventure": 12, "Animation": 16, "Comedy": 35, "Crime": 80, "Documentary": 99, 
+        #         "Drama": 18, "Family": 10751, "Fantasy": 14, "History": 36, "Horror": 27, "Music": 10402,
+        #         "Mystery": 9648, "Romance": 10749, "Science Fiction": 878, "TV Movie": 10770, "Thriller": 53,
+        #         "War": 10752, "Western": 37}
+        
+        # searchGenre = []
+        # for i in genre:
+        #     searchGenre.append(convertGenre[i]) 
+            
+        pipeline = []
+        
+        pipeline.append(
+            {
+                "$match":{
+                    "genre_ids": {
+                    "$in": genre
+                    } 
+                }
+            } 
+        )
+
+        query = collection.aggregate(pipeline=pipeline)
+
+        results = []
+        for elem in query:
+            results.append(elem)
+    
+    return {"results": results}
+        
+
+@app.route("/random")
+def randomMovie():
+    highest_id = collection.find_one({}, sort=[('_id', -1)])
+    lowest_id = collection.find_one({}, sort=[('_id', 1)])
+
+    randomNum = random.randint(lowest_id.get("_id"), highest_id.get("_id"))
+
+    query = collection.aggregate([
+        {"$addFields": {"abs_difference": {"$abs": {"$subtract": ["$_id", randomNum]}}}},
+        {"$sort": {"abs_difference": 1}},
+        {"$limit": 1}
+    ])
+
+    results = list(query)
+
+    return results

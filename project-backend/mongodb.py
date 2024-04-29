@@ -3,24 +3,20 @@ from pymongo import MongoClient
 import json
 import requests
 
+cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
 
+db = cluster["all_movies"]
+
+collection = db["movies"]
 
 def delete_db(): #this will delete all database entries
-   cluster = MongoClient("mongodb+srv://shadow125ninja:testing123@filmfinder.yznbxyz.mongodb.net/")
-   db = cluster["Movies"]
-   db["Popular"].delete_many({})
+   collection.delete_many({})
 
 
 def update_db():
 
    movieList = [] #holds the list of the movie objects
    id_set = set() #this set holds duplicate ids
-
-   cluster = MongoClient("mongodb+srv://shadow125ninja:testing123@filmfinder.yznbxyz.mongodb.net/")
-   
-   db = cluster["Movies"]
-
-   collection = db["Popular"]
 
    for i in range(1,31): #change range here to add more pages of the popular movies to the database
       url = f"https://api.themoviedb.org/3/movie/popular?language=en-US&page={i}" #popular page 
@@ -45,6 +41,20 @@ def update_db():
       print(f"Length of testList: {len(movieList)}")  # Debugging amount of entries in list
    
    for entries in movieList:
+      votes = entries["vote_average"]/2    
+      # whole = votes//1    
+      # rem = votes % 1
+      # if rem <= 0.299 and rem >= 0:
+      #     rem = 0
+      # elif rem <= 0.699 and rem >= 0.3:
+      #     rem = 0.5
+      # elif rem <= .999 and rem >= 0.7:
+      #     rem = 1
+
+      vote_average = round(votes, 1)
+      if vote_average > 5:
+          vote_average = 5
+    
       post = {
          "_id" : entries['id'],
          "genre_ids": entries["genre_ids"],
@@ -53,29 +63,27 @@ def update_db():
          "synopsis": entries["overview"],
          "poster_path": "https://image.tmdb.org/t/p/w500"+ entries["poster_path"],
          "release_date": entries["release_date"],
-         "rating": entries["vote_average"]
+         "year": entries["release_date"][:4],
+         "votes": entries["vote_average"],
+         "rating": vote_average
       } 
       collection.insert_one(post)
-      print(f"Added {post['title']}")
+      print("Added " + post["title"])
    print("---ALL MOVIES UPDATED IN DATABASE---")
 
 def search_movie_title(movie):
-   cluster = MongoClient("mongodb+srv://shadow125ninja:testing123@filmfinder.yznbxyz.mongodb.net/")
-
-   db = cluster["Movies"]
-
-   collection = db["Popular"] 
-
    match = collection.find(
        {
          "title": {
                "$regex": movie,
                "$options": "i"
          }
+       },
+       {
+         "$sort": {"votes": 1}
        }
    )
 
    matches = list(match)
 
    return matches
-   

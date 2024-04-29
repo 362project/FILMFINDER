@@ -1,15 +1,18 @@
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, jsonify
 import requests
-from mongodb import update_db, delete_db, search_movie_title
+from mongodb import update_db, delete_db, search_movie_title, generate_genre_combos
 import json
 import pymongo 
 from pymongo import MongoClient
 import random
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 
-#database
 cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
+
 db = cluster["all_movies"]
+
 collection = db["movies"]
 
 @app.route("/")
@@ -88,18 +91,10 @@ def test():
 
     return finalList
 
-@app.route("/popular") #displays popular movies
-def popular():
-    movielist = [];
-    for doc in collection.aggregate([{"$sort": {"votes": -1}}]):
-        movielist.append(doc)
-    
-    return {"list": movielist}, 202
-
 @app.route("/recommendation", methods = ["POST"])
 def recommendation():
     if request.method == "POST":
-        uploaded_json = dict(request.json)
+        uploaded_json = request.json
 
         genre = uploaded_json.get("genre").split()
         date = uploaded_json.get("year")
@@ -141,52 +136,66 @@ def recommendation():
                 }
             })
 
-            pipeline.append({
-                "$sort": {"votes": -1}
-            })
+        pipeline.append({
+            "$match": {
+                "votes": {"$ne": 0}
+            }
+        })
+        pipeline.append({
+            "$match": {
+                "synopsis": {"$ne": ""}
+            }
+        })
+
+        pipeline.append({"$sort": {"votes": -1}})
+        pipeline.append({"$limit": 30})
 
         query = collection.aggregate(pipeline=pipeline)
-        results = []
-        for elem in query:
-            results.append(elem)
 
-    return {"results": results}
+        results = list(query)
+        
+        return results
 
-@app.route("/find", methods = ["POST"])
+@app.route("/search", methods=["POST"])
 def find():
+    
     if request.method == "POST":
-        uploaded_json = dict(request.json)
+        uploaded_json = request.json
+        title = uploaded_json.get("title")
 
-        genre = uploaded_json.get("genre")
-
-        # convertGenre = {"Action": 28, "Adventure": 12, "Animation": 16, "Comedy": 35, "Crime": 80, "Documentary": 99, 
-        #         "Drama": 18, "Family": 10751, "Fantasy": 14, "History": 36, "Horror": 27, "Music": 10402,
-        #         "Mystery": 9648, "Romance": 10749, "Science Fiction": 878, "TV Movie": 10770, "Thriller": 53,
-        #         "War": 10752, "Western": 37}
-        
-        # searchGenre = []
-        # for i in genre:
-        #     searchGenre.append(convertGenre[i]) 
-            
-        pipeline = []
-        
-        pipeline.append(
+        partialMatch = collection.aggregate([
             {
                 "$match":{
-                    "genre_ids": {
-                    "$in": genre
-                    } 
+                    "title": {
+                        "$regex": title,
+                        "$options": "i"
+                    }
                 }
-            } 
-        )
+            },
+            {"$sort": {"votes": -1}},
+            {"$limit": 1}
+        ])
+        
+        getGenre = list(partialMatch)
+        genre = []
+        for doc in getGenre:
+            matchGenre = doc.get("genre_ids")
+            if matchGenre:
+                genre.extend(matchGenre)
 
-        query = collection.aggregate(pipeline=pipeline)
+        query = collection.aggregate([
+            {"$addFields": {
+                "matches": {"$size": {"$setIntersection": ["$genre_ids", genre]}}
+            }},
+            {"$sort": {"matches": -1, "votes": -1}},
+            {"$match": {"votes": {"$ne": ""}}},
+            {"$match": {"synopsis": {"$ne": ""}}},
+            {"$limit": 30}
+        ])
 
-        results = []
-        for elem in query:
-            results.append(elem)
-    
-    return {"results": results}
+        result = list(query)
+
+        return result, 202
         
 
 @app.route("/random")
@@ -199,9 +208,24 @@ def randomMovie():
     query = collection.aggregate([
         {"$addFields": {"abs_difference": {"$abs": {"$subtract": ["$_id", randomNum]}}}},
         {"$sort": {"abs_difference": 1}},
+        {"$match": {"votes": {"$ne": ""}}},
+        {"$match": {"synopsis": {"$ne": ""}}},
         {"$limit": 1}
     ])
 
     results = list(query)
 
-    return results
+    return results, 202
+
+
+@app.route("/popular") #displays popular movies
+def popular():
+    movielist = collection.aggregate([
+        {"$sort": {"votes": -1}},
+        {"$match": {"votes": {"$ne": ""}}},
+        {"$match": {"synopsis": {"$ne": ""}}},
+        {"$limit": 100}
+    ])
+    
+    result = list(movielist)
+    return result, 202

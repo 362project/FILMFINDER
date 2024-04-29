@@ -2,7 +2,7 @@ import pymongo
 from pymongo import MongoClient
 import json
 import requests
-
+from itertools import combinations
 cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
 
 db = cluster["all_movies"]
@@ -42,14 +42,6 @@ def update_db():
    
    for entries in movieList:
       votes = entries["vote_average"]/2    
-      # whole = votes//1    
-      # rem = votes % 1
-      # if rem <= 0.299 and rem >= 0:
-      #     rem = 0
-      # elif rem <= 0.699 and rem >= 0.3:
-      #     rem = 0.5
-      # elif rem <= .999 and rem >= 0.7:
-      #     rem = 1
 
       vote_average = round(votes, 1)
       if vote_average > 5:
@@ -80,12 +72,16 @@ def search_movie_title(movie):
                "$regex": movie,
                "$options": "i"
          }
-       },
-       {
-         "$sort": {"votes": 1}
        }
    )
 
    matches = list(match)
 
    return matches
+
+def generate_genre_combos(genres):
+   combinations_list =[]
+   for r in range(len(genres), 1, -1):
+      for combination in combinations(genres, r):
+         combinations_list.append({"genres": {"$all":list(combination)}})
+   return combinations_list

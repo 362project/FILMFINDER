@@ -1,0 +1,69 @@
+/* Add a black background color to the top navigation */
+.topnav{
+    background-color: #222222;
+  }
+  
+  /* Style the links inside the navigation bar */
+  .topnav a, .dropbtn{
+    display: inline-block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover, .dropbtn:hover {
+    background-color: #a80c0c;
+    color: rgb(255, 255, 255);
+  }
+
+  
+  /* Add an active class to highlight the current page */
+  .topnav a.active{
+    background-color: #2a2a2a;
+    color: white;
+  }
+  
+  /* Hide the link that should open and close the topnav on small screens */
+  .topnav .icon {
+    display: none;
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f6f6f6;
+    min-width: 80px;
+    z-index: 1;  
+    left: 0;
+    top: calc(100%);
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #a80c0c}
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: inline-block;
+  }  
+  .dropdown-content .dropbtn.active{
+    background-color: #a80c0c;
+    color: white;
+  }

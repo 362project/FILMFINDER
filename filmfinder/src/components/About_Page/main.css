@@ -1,0 +1,112 @@
+/* MainContent.css */
+main {
+    height: 86.1vh;
+    display: grid;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+    padding: 0px 100px;
+    background-color: #2a2a2a;
+}
+
+main p {
+    font-size: 30px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.logo{
+    display: grid;
+    align-items: center;
+    margin: 0 auto;
+    margin-bottom: -5%;
+    margin-top: -1%;
+    width: 250px;
+    height: auto;
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(3, auto); /* Two columns for two buttons */
+    gap: 10%; /* Gap between buttons */
+    justify-content: center;
+}
+
+.button {
+    border-radius: 4px;
+    background-color: #a80c0c;
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 20px;
+    padding: 10px;
+    height: 70px;
+    width: 350px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin-top: -25%;
+}
+
+.button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -40px;
+    transition: 0.5s;
+}
+
+.button:hover span {
+    padding-right: 25px;
+}
+
+.button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* Style the search field */
+  form.search input[type=text] {
+    padding: 12px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: none;
+    margin-left: 6%;
+    width: 80%;
+    background: #f1f1f1;
+  }
+  
+  /* Style the submit button */
+  form.search button {
+    float: none;
+    width: 5%;
+    padding: 12px;
+    background: #a80c0c;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+  }
+  
+  form.search button:hover {
+    background: #980a0a;
+  }
+  
+  /* Clear floats */
+  form.search::after {
+    content: "";
+    clear: both;
+    display: table;
+  }

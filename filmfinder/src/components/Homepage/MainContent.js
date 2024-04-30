@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './main.css';
 import Logo from '../../logo-no-background.png';
 
 function MainContent() {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        // Redirect to the search page with the search term as a query parameter
+        window.location.href = `/search?title=${encodeURIComponent(searchTerm)}`;
+    };
+
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
     return (
         <main>            
             <div className="logo">
@@ -11,9 +23,15 @@ function MainContent() {
             </div>
 
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-            <form class="search" action="action_page.php">
-                <input type="text" placeholder="Search Movies..." name="search"></input>
-                <button type="submit"><i class="fa fa-search"></i></button>
+            <form className="search" onSubmit={handleSearch}>
+                <input 
+                    type="text" 
+                    placeholder="Search Movies..." 
+                    name="search" 
+                    value={searchTerm}
+                    onChange={handleInputChange}
+                />
+                <button type="submit"><i className="fa fa-search"></i></button>
             </form>
 
             <div className="button-container">
@@ -26,4 +44,4 @@ function MainContent() {
     );
 }
 
-export default MainContent;
+export default MainContent; 

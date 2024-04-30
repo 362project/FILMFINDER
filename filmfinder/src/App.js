@@ -7,6 +7,7 @@ import FormPage from './components/Form_Page/Formpage.js';
 import PopularResultsPage from './components/Popular Results/Results.js';
 import AboutPage from './components/About_Page/About.js';
 import Randompage from './components/Random Movie/Random.js';
+import Searchedpage from'./components/Search_Results_Page/Search.js';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/popular" element={<PopularResultsPage/>} />
         <Route path="/about" element={<AboutPage/>} />
         <Route path="/random" element={<Randompage/>} />
+        <Route path="/search" element={<Searchedpage/>} />
       </Routes>
     <Footer/>
     </BrowserRouter>

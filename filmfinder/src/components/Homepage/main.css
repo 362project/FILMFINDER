@@ -18,7 +18,7 @@ main p {
 .logo{
     display: grid;
     align-items: center;
-    margin: 0 auto;
+    margin: 1 auto;
     margin-bottom: -5%;
     margin-top: -1%;
     width: 250px;
@@ -109,4 +109,7 @@ main p {
     content: "";
     clear: both;
     display: table;
+  }
+  .search-button{
+    display: none;
   }

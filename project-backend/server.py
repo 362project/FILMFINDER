@@ -5,7 +5,11 @@ import json
 import pymongo 
 from pymongo import MongoClient
 import random
+from flask_cors import CORS
+
 app = Flask(__name__)
+
+CORS(app)  # Enable CORS for all routes
 
 cluster = MongoClient("mongodb+srv://tylerlui:D6FWuClyUZAPHIYB@moviecluster.ybu1heb.mongodb.net/")
 
@@ -134,16 +138,25 @@ def recommendation():
                 }
             })
 
-            pipeline.append({
-                "$sort": {"votes": -1}
-            })
+        pipeline.append({
+            "$match": {
+                "votes": {"$ne": 0}
+            }
+        })
+        pipeline.append({
+            "$match": {
+                "synopsis": {"$ne": ""}
+            }
+        })
+
+        pipeline.append({"$sort": {"votes": -1}})
+        pipeline.append({"$limit": 30})
 
         query = collection.aggregate(pipeline=pipeline)
-        results = []
-        for elem in query:
-            results.append(elem)
 
-    return {"results": results}
+        results = list(query)
+        
+        return results
 
 @app.route("/search", methods=["POST"])
 def find():
@@ -177,12 +190,14 @@ def find():
                 "matches": {"$size": {"$setIntersection": ["$genre_ids", genre]}}
             }},
             {"$sort": {"matches": -1, "votes": -1}},
+            {"$match": {"votes": {"$ne": ""}}},
+            {"$match": {"synopsis": {"$ne": ""}}},
             {"$limit": 30}
         ])
 
         result = list(query)
 
-        return result
+        return result, 202
         
 
 @app.route("/random")
@@ -195,18 +210,24 @@ def randomMovie():
     query = collection.aggregate([
         {"$addFields": {"abs_difference": {"$abs": {"$subtract": ["$_id", randomNum]}}}},
         {"$sort": {"abs_difference": 1}},
+        {"$match": {"votes": {"$ne": ""}}},
+        {"$match": {"synopsis": {"$ne": ""}}},
         {"$limit": 1}
     ])
 
     results = list(query)
 
-    return results
+    return results, 202
 
 
 @app.route("/popular") #displays popular movies
 def popular():
-    movielist = []
-    for doc in collection.aggregate([{"$sort": {"votes": -1}}]):
-        movielist.append(doc)
+    movielist = collection.aggregate([
+        {"$sort": {"votes": -1}},
+        {"$match": {"votes": {"$ne": ""}}},
+        {"$match": {"synopsis": {"$ne": ""}}},
+        {"$limit": 100}
+    ])
     
-    return {"list": movielist}, 202
+    result = list(movielist)
+    return result, 202

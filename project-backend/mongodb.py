@@ -41,11 +41,32 @@ def update_db():
       print(f"Length of testList: {len(movieList)}")  # Debugging amount of entries in list
    
    for entries in movieList:
-      votes = entries["vote_average"]/2    
 
-      vote_average = round(votes, 1)
-      if vote_average > 5:
-          vote_average = 5
+      video_url = f"https://api.themoviedb.org/3/movie/{entries['id']}/videos?language=en-US"
+
+      headers = {
+         "accept": "application/json",
+         "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MWYyYmQxZTgwNTMzNTdlN2ZiN2NlZWI0YTIzN2IxYyIsInN1YiI6IjY1YzE4ZmQ5YTA2NjQ1MDE2MTVkODM0YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MylPZUvgDbWY9wheuA6PfkzGWovHcS4LaZs-q8Gju-E"
+      }
+
+      response = requests.get(video_url, headers=headers)
+
+      data = json.loads(response.text)    
+      
+      try:
+         key_result = data["results"][0]["key"]
+      except IndexError:
+         key_result = 0
+          
+      votes = entries["vote_average"]/2  
+
+      votes_rounded = round(votes)
+      if votes_rounded > 5:
+          votes_rounded = 5
+
+      rating = round(votes)
+      if rating > 5:
+          rating = 5
     
       post = {
          "_id" : entries['id'],
@@ -57,7 +78,8 @@ def update_db():
          "release_date": entries["release_date"],
          "year": entries["release_date"][:4],
          "votes": entries["vote_average"],
-         "rating": vote_average
+         "rating": rating,
+         "trailer_key": key_result
       } 
       collection.insert_one(post)
       print(f"Added {post["title"]}")

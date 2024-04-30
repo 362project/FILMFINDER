@@ -8,7 +8,6 @@ function MainContent() {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        // Redirect to the search page with the search term as a query parameter
         window.location.href = `/search?title=${encodeURIComponent(searchTerm)}`;
     };
 

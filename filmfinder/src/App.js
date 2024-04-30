@@ -8,6 +8,7 @@ import PopularResultsPage from './components/Popular Results/Results.js';
 import AboutPage from './components/About_Page/About.js';
 import Randompage from './components/Random Movie/Random.js';
 import Searchedpage from'./components/Search_Results_Page/Search.js';
+import Recommendedpage from './components/Recommended_Page/Recommended.js';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/about" element={<AboutPage/>} />
         <Route path="/random" element={<Randompage/>} />
         <Route path="/search" element={<Searchedpage/>} />
+        <Route path="/recommended" element={<Recommendedpage/>} />
       </Routes>
     <Footer/>
     </BrowserRouter>

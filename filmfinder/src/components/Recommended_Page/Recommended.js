@@ -1,7 +1,7 @@
 import MainContent from './MainContent.js';
 
 
-function Searchpage() {
+function Recommendedpage() {
     return (
       <div>
         <MainContent />
@@ -9,4 +9,4 @@ function Searchpage() {
     );
   }
   
-export default Searchpage;
+export default Recommendedpage;

@@ -21,7 +21,7 @@ function App() {
         <Route path="/about" element={<AboutPage/>} />
         <Route path="/random" element={<Randompage/>} />
         <Route path="/search" element={<Searchedpage/>} />
-        <Route path="/recommended" element={<Recommendedpage/>} />
+        <Route path="/recommendation" element={<Recommendedpage/>} />
       </Routes>
     <Footer/>
     </BrowserRouter>

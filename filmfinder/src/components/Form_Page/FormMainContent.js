@@ -38,16 +38,33 @@ function MainContent() {
             }
         }
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const params = new URLSearchParams(formData);
+            const params = new URLSearchParams();
+    
+            // Add genre parameter if it has a value
+            if (formData.genre.length > 0) {
+                params.append('genre', formData.genre.join(' '));
+            }else(params.append('genre', ''));
+    
+            // Add year parameter if it has a value
+            if (formData.year) {
+                params.append('year', formData.year);
+            }else(params.append('year', ''));
+    
+            // Add rating parameter if it has a value
+            if (formData.rating) {
+                params.append('rating', formData.rating);
+            }else(params.append('rating', ''));
+    
+            // Redirect to the recommendation page with the constructed URL
             window.location.href = `/recommendation?${params.toString()}`;
         } catch (error) {
             console.error('Error redirecting:', error);
         }
     };
+    
 
     return (
         <main>

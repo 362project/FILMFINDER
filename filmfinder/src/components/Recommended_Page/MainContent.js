@@ -49,14 +49,45 @@ function MainContent() {
                 {currentMovies.length > 0 ? (
                     currentMovies.map(movie => (
                         <div key={movie._id} className="movie">
-                            <h3>{movie.title} ({movie.year})</h3>
+                            <h3 >{movie.title}</h3>
+                            <h2 class="year">{movie.year} · {movie.runtime} · {movie.votes}/5</h2>
                             <img src={movie.poster_path} alt={movie.title} />
                             <div className='movie-details'>
-                                <p><strong>Rating:</strong> {movie.rating}</p>
-                                <p><strong>Release Date:</strong> {movie.release_date}</p>
-                                <p><strong>Synopsis:</strong> {movie.synopsis}</p>
+                                <p> {movie.synopsis}</p>
+                                <div className="genres">
+                        {movie.genres_list.map((genre, index) => (
+                            <h1 key={index}>{genre}</h1>
+                        ))}
+                    </div>
+                                <div className="Actors">
+                        {movie.actors.map((actor, index) => {
+                            const nameDisplayed = movie.actors.slice(0, index).some(d => d.name === actor.name);
+                            if (!nameDisplayed) {
+                                return (
+                                    <h1 className="actor-wrapper" key={index}>
+                                        <div className="actor-member">
+                                            <div className="poster-wrapper">
+                                                <img
+                                                    src={actor.picture}
+                                                    alt={actor.name}
+                                                    style={{ width: '100px', height: '150px' }}
+                                                />
+                                            </div>
+                                            <ul className="actor-list" style={{ listStyleType: 'none' }}>
+                                                <li className="actor-name">{actor.name}</li>
+                                                <li className="actor-character">{actor.character}</li>
+                                            </ul>
+                                        </div>
+                                    </h1>
+                                );
+                            }
+                            return null;
+                        })}
+                    </div>
                             </div>
+                            
                         </div>
+                        
                     ))
                 ) : (
                     <p>No results found.</p>

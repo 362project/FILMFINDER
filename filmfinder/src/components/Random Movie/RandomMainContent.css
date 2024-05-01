@@ -1,0 +1,34 @@
+.title{
+    font-size: 24px;
+    color:white;
+}
+
+.movie{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: auto;
+    grid-gap: 10px;
+}
+
+.movie h3{
+    color: white; 
+    font-size: 40px; 
+    margin: 10px;
+    max-height: 80px;
+    margin: 10px;
+}
+
+.movie img {
+    grid-column: 1;
+    width: 350px;
+    height: auto;
+    margin-right: 20px;
+  }
+
+.movie movie-details{
+    grid-column: 2;
+    color: white;
+    max-width: 50%;
+    max-height: 150 px;
+}
+

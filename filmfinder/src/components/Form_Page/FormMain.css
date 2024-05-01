@@ -1,0 +1,197 @@
+/* MainContent.css */
+main {
+    overflow: auto;
+    display: grid;
+    margin: auto;
+    width: 100%;
+    padding: 0px 100px;
+    background-color: #2a2a2a;
+}
+
+/*/////////////////////////////////////////////Words////////////////////////////////////////////*/
+  label{color: white;}
+
+  .title{
+    color: white;
+    text-align: center;
+    font-size: 40px;
+  }
+
+  .subtitle{
+    color: white;
+    text-align: left;
+    margin: 20px auto;
+    text-align: center;
+  }
+
+/*/////////////////////////////////////////////Genre Selector////////////////////////////////////////////*/
+  .container {
+    display: grid;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .container-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
+
+  .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+  }
+
+  .container:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+
+  .container input:checked ~ .checkmark {
+    background-color: #a80c0c;
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .container input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+/*/////////////////////////////////////////////Year Search Bar////////////////////////////////////////////*/
+  .release-year{
+    display: grid;
+    padding: 5px;
+    margin: 5px;
+    max-height: 30px;;
+  }
+  .release-year input[type=text] {
+      display: grid;
+      padding: auto;
+      align-content: center;
+      margin: auto;
+      border: 1px solid grey;
+      font-size: 25px;
+      width: 60%;
+      background: #f1f1f1;
+    }
+    * {
+      box-sizing:  content-box;
+    }
+/*/////////////////////////////////////////////User Rating Selector////////////////////////////////////////////*/
+
+  .user-rating-container{
+    display: grid;
+    padding-left: 25%;
+    width: 60%;
+    justify-self: center;
+  }
+
+  .user-rating {
+    height: auto;
+    width: 40%;
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .user-rating input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .checkmark2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+  }
+
+  .user-rating:hover input ~ .checkmark2 {
+    background-color: #ccc;
+  }
+
+  .user-rating input:checked ~ .checkmark2 {
+    background-color: #a80c0c;
+  }
+
+  .checkmark2:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .user-rating input:checked ~ .checkmark2:after {
+    display: block;
+  }
+
+  .user-rating .checkmark2:after {
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+  }
+  .checked {
+    color: orange;
+  }
+
+/*/////////////////////////////////////////////Submit Button////////////////////////////////////////////*/
+
+.btn{
+  display: grid;
+  align-items: center;
+}
+
+.submit-button {
+  border: none; /* Remove borders */
+  background-color: #a80c0c;
+  color: white; /* Add a text color */
+  font-size: 20px;
+  padding: 14px 18px; /* Add some padding */
+  cursor: pointer; /* Add a pointer cursor on mouse-over */
+}

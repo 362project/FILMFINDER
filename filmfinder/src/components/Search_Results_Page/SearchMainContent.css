@@ -25,6 +25,10 @@
     margin-right: 20px;
   }
 
+.genres{
+  color: white;
+}
+
 .movie movie-details{
     grid-column: 2;
     color: white;

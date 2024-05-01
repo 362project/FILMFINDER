@@ -20,6 +20,10 @@
     margin: 10px;
 }
 
+.genres{
+  color: white;
+}
+
 .movie img {
     grid-column: 1;
     width: 350px;

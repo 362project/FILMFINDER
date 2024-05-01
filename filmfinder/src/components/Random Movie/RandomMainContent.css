@@ -107,6 +107,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
     padding: 0;
+    color: white;
     text-align: center;
     margin-top: 10px;
 

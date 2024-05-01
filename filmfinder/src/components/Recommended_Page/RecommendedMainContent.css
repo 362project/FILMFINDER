@@ -18,7 +18,9 @@
     font-size: 40px; 
     max-height: 80px;
 }
-
+.genres{
+    color: white;
+  }
 .year{
     margin:0;
     font-size: 20px;
